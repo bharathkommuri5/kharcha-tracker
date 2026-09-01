@@ -26,4 +26,19 @@
   dashboard after the first deploy. Full walkthrough: [../docs/deploy-render.md](../docs/deploy-render.md).
 - `app/config.sqlalchemy_url` rewrites Render's `postgresql://` → `postgresql+psycopg2://`.
 
-## Status: 🟡 Config ready — not yet deployed (do after real Google/SMTP verified locally)
+## Update (2026-09-01) — Neon Postgres, verified locally
+- DB is **Neon** (external, persistent free tier) instead of Render Postgres — `render.yaml` now
+  has no `databases:` block; `DATABASE_URL` is a `sync: false` env var (same string local + prod).
+- Migration runs in `startCommand` (`alembic upgrade head && uvicorn …`) — free tier has no
+  pre-deploy step. `PYTHON_VERSION=3.11.9` pinned.
+- **Ran migrations 0001+0002 against Neon** — all tables + enum types (`category`, `paymentmode`,
+  `teamrole`) created; alembic head `355d122e7b94`.
+- **Full stack live-tested against Neon Postgres**: health (`db: ok`), transaction CRUD (Decimal),
+  analytics summary, teams combined view (`total` + `by_member`), avatar upload + serve
+  (LargeBinary), emailed report. Frontend browser test: add expense → persists across reload.
+- Neon DB then wiped back to a clean schema for the user's own testing.
+
+Next: merge `dev` → `main`, create the Render Blueprint, set the env vars, update Google origins,
+test the live site. Walkthrough: [../docs/deploy-render.md](../docs/deploy-render.md).
+
+## Status: 🟡 Config + Postgres verified locally — Render deploy pending
