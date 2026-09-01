@@ -37,6 +37,8 @@ services:
         value: "false"
       - key: GOOGLE_CLIENT_ID
         sync: false          # set in dashboard
+      - key: SUPERADMIN_EMAILS
+        sync: false          # comma-separated emails that can manage teams
       - key: CORS_ORIGINS
         sync: false          # set to the static site URL after first deploy
       - key: SMTP_HOST

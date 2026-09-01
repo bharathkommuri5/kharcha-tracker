@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     JWT_EXPIRE_MINUTES: int = 10080
     GOOGLE_CLIENT_ID: str = ""
     DEV_AUTH: bool = False
+    SUPERADMIN_EMAILS: str = ""
 
     # CORS
     CORS_ORIGINS: str = (
@@ -42,6 +43,10 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
+
+    @property
+    def superadmin_email_set(self) -> set[str]:
+        return {e.strip().lower() for e in self.SUPERADMIN_EMAILS.split(",") if e.strip()}
 
 
 @lru_cache

@@ -1,9 +1,7 @@
-import { useDashboard } from "../context/DashboardContext.jsx";
 import { formatFullDate, formatINR } from "../lib/format.js";
 import BrandMark from "./BrandMark.jsx";
 
-export default function HeroBalance() {
-  const { summary, range } = useDashboard();
+export default function HeroBalance({ summary, range, label = "Spent" }) {
   const total = summary?.total ?? 0;
   const count = summary?.transaction_count ?? 0;
   const top = summary?.top_category;
@@ -15,7 +13,7 @@ export default function HeroBalance() {
       </div>
       <div className="relative">
         <p className="text-xs font-semibold uppercase tracking-wide opacity-80">
-          Spent {range ? `· ${formatFullDate(range.start)} – ${formatFullDate(range.end)}` : ""}
+          {label} {range ? `· ${formatFullDate(range.start)} – ${formatFullDate(range.end)}` : ""}
         </p>
         <p className="mt-1 text-3xl font-bold tabular-nums sm:text-4xl">{formatINR(total)}</p>
         <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm">

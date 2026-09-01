@@ -16,6 +16,8 @@ Work them in order; do not start a story until the previous one is tested and me
 | [US-09](us-09-right-panel-charts.md) | Right panel — summary cards + charts | 🟢 Done (live-tested) |
 | [US-10](us-10-email-report-modal.md) | Email report modal (default/custom range) | 🟢 Done (dev-mode live-tested) |
 | [US-11](us-11-render-deploy.md) | Render deployment & end-to-end test | 🟡 Config ready — deploy pending |
+| [US-12](us-12-profiles-avatars.md) | User profiles & avatar images + theme toggle move | 🟢 Done |
+| [US-13](us-13-teams-collaboration.md) | Teams & combined expense view (super-admin managed) | 🟢 Done |
 
 Legend: ⚪ Not started · 🟡 In progress · 🟢 Done (tested) · 🔵 Deployed
 
@@ -24,6 +26,19 @@ Logomark = a ₹ over a spend-trend line, indigo→violet. Source: `frontend/pub
 React version `frontend/src/components/BrandMark.jsx` (used in header + landing). Raster assets
 (`favicon-16/32.png`, `apple-touch-icon.png`, `icon-192/512.png`) + `manifest.webmanifest` for
 installable PWA. Regenerate rasters from the SVG if it changes.
+
+## Frontend architecture
+- **Routing** (react-router-dom): `/` landing, `/app` layout (`pages/AppLayout.jsx`) with nested
+  routes `overview | transactions | teams | teams/:teamId | reports | profile` rendered via
+  `<Outlet context={{ openAdd }}>`. `<NavLink>` for the sidebar / bottom nav. Deep-linkable,
+  refresh-stable, back/forward works. Static-host SPA rewrite is in `render.yaml`.
+- **State**: Context only — `AuthContext`, `ThemeContext`, `ToastContext`, `DashboardContext`
+  (transactions/summary/options/month range + mutations), `TeamsContext`. No Redux/Zustand.
+  Server-fetching is hand-rolled `useEffect` + a stale-response guard; migrating to TanStack Query
+  is a noted future option, not done.
+- **Payment icons**: real PhonePe / Google Pay marks from the open-source `simple-icons` set
+  (shown nominatively to identify the method); brand-colour monograms for CRED / Supermoney;
+  generic lucide icons for cards / cash / other. All other UI icons: `lucide-react` via `lib/icons.js`.
 
 ## Conventions
 - Currency is **₹ INR** everywhere. Never render `$`.

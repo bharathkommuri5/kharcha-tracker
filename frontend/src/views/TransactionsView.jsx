@@ -1,10 +1,12 @@
+import { useOutletContext } from "react-router-dom";
 import MonthNav from "../components/MonthNav.jsx";
 import TransactionList from "../components/TransactionList.jsx";
 import { useDashboard } from "../context/DashboardContext.jsx";
 import { formatINR } from "../lib/format.js";
 import { Card } from "../components/ui/index.jsx";
 
-export default function TransactionsView({ onAdd }) {
+export default function TransactionsView() {
+  const { openAdd } = useOutletContext();
   const { summary, transactions } = useDashboard();
 
   return (
@@ -25,7 +27,7 @@ export default function TransactionsView({ onAdd }) {
             <p className="text-lg font-bold tabular-nums text-fg">{transactions.length}</p>
           </div>
         </div>
-        <TransactionList onAddExpense={() => onAdd()} />
+        <TransactionList onAddExpense={() => openAdd()} />
       </Card>
     </div>
   );

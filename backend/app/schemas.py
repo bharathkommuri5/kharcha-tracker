@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.models import Category, PaymentMode
+from app.models import Category, PaymentMode, TeamRole
 
 # ------------------------------------------------------------------ auth
 
@@ -25,7 +25,19 @@ class UserRead(BaseModel):
     email: str
     name: str
     username: str
+    avatar_url: str | None = None
+    is_superadmin: bool = False
     created_at: datetime
+
+
+class UserBrief(BaseModel):
+    """Lightweight user card for member pickers / team rows."""
+
+    id: int
+    name: str
+    username: str
+    email: str
+    avatar_url: str | None = None
 
 
 class UsernameUpdate(BaseModel):
@@ -120,3 +132,65 @@ class ReportEmailResponse(BaseModel):
     range: DateRange
     dev: bool = False
     detail: str | None = None
+
+
+# ------------------------------------------------------------------ teams
+
+
+class TeamCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=60)
+
+    @field_validator("name")
+    @classmethod
+    def _strip(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Team name cannot be blank")
+        return v
+
+
+class TeamUpdate(BaseModel):
+    name: str = Field(min_length=1, max_length=60)
+
+
+class AddMemberRequest(BaseModel):
+    user_id: int
+    role: TeamRole = TeamRole.member
+
+
+class TeamRead(BaseModel):
+    """Sidebar / list row."""
+
+    id: int
+    name: str
+    avatar_url: str | None = None
+    role: TeamRole
+    member_count: int
+
+
+class TeamMemberRead(BaseModel):
+    user: UserBrief
+    role: TeamRole
+
+
+class TeamDetail(BaseModel):
+    id: int
+    name: str
+    avatar_url: str | None = None
+    my_role: TeamRole
+    members: list[TeamMemberRead]
+
+
+class MemberTotal(BaseModel):
+    user_id: int
+    name: str
+    avatar_url: str | None = None
+    total: Decimal
+
+
+class TeamAnalyticsSummary(AnalyticsSummary):
+    by_member: list[MemberTotal]
+
+
+class TeamTransactionRead(TransactionRead):
+    member: UserBrief

@@ -8,15 +8,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useDashboard } from "../../context/DashboardContext.jsx";
 import { formatINR, formatINRCompact } from "../../lib/format.js";
 import ChartCard from "./ChartCard.jsx";
 import { tooltipStyle, useChartTheme } from "./useChartTheme.js";
 
 const PALETTE = ["#6366f1", "#8b5cf6", "#ec4899", "#f97316", "#14b8a6", "#0ea5e9", "#64748b", "#ef4444"];
 
-export default function PaymentBar() {
-  const { summary } = useDashboard();
+export default function PaymentBar({ summary }) {
   const t = useChartTheme();
   const data = (summary?.by_payment_mode || []).map((row, i) => ({
     name: row.label,

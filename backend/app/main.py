@@ -4,14 +4,24 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import analytics, auth, config, health, reports, transactions
+from app.routers import (
+    analytics,
+    auth,
+    config,
+    health,
+    images,
+    reports,
+    teams,
+    transactions,
+    users,
+)
 
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="Kharcha Tracker API",
-    version="0.1.0",
-    description="Personal expense tracker — Google auth, transactions, analytics, emailed reports.",
+    version="0.2.0",
+    description="Personal expense tracker — Google auth, transactions, analytics, teams, reports.",
 )
 
 app.add_middleware(
@@ -22,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (health, auth, config, transactions, analytics, reports):
+for module in (health, auth, config, transactions, analytics, reports, images, users, teams):
     app.include_router(module.router)
 
 

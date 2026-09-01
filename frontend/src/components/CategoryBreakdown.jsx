@@ -1,9 +1,7 @@
-import { useDashboard } from "../context/DashboardContext.jsx";
 import { formatINR } from "../lib/format.js";
 import { Card, EmptyState } from "./ui/index.jsx";
 
-export default function CategoryBreakdown() {
-  const { summary, options } = useDashboard();
+export default function CategoryBreakdown({ summary, options }) {
   const meta = {};
   (options?.categories || []).forEach((c) => (meta[c.value] = c));
   const rows = summary?.by_category || [];

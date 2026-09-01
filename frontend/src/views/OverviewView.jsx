@@ -1,3 +1,4 @@
+import { useOutletContext } from "react-router-dom";
 import CategoryBreakdown from "../components/CategoryBreakdown.jsx";
 import HeroBalance from "../components/HeroBalance.jsx";
 import MonthNav from "../components/MonthNav.jsx";
@@ -8,8 +9,9 @@ import PaymentBar from "../components/charts/PaymentBar.jsx";
 import { useDashboard } from "../context/DashboardContext.jsx";
 import { Card, EmptyState } from "../components/ui/index.jsx";
 
-export default function OverviewView({ onAdd }) {
-  const { summary, loading } = useDashboard();
+export default function OverviewView() {
+  const { openAdd } = useOutletContext();
+  const { summary, options, range, loading } = useDashboard();
   const empty = summary && summary.transaction_count === 0 && !loading;
 
   return (
@@ -19,9 +21,9 @@ export default function OverviewView({ onAdd }) {
         <MonthNav />
       </div>
 
-      <HeroBalance />
+      <HeroBalance summary={summary} range={range} />
 
-      <QuickAddTiles onPick={onAdd} />
+      <QuickAddTiles onPick={openAdd} />
 
       {empty ? (
         <Card>
@@ -32,12 +34,12 @@ export default function OverviewView({ onAdd }) {
       ) : (
         <>
           <div className="grid gap-4 lg:grid-cols-2">
-            <CategoryDonut />
-            <CategoryBreakdown />
+            <CategoryDonut summary={summary} options={options} />
+            <CategoryBreakdown summary={summary} options={options} />
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
-            <PaymentBar />
-            <DailyTrend />
+            <PaymentBar summary={summary} />
+            <DailyTrend summary={summary} />
           </div>
         </>
       )}

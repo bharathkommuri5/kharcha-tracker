@@ -64,19 +64,36 @@ export function AuthProvider({ children }) {
     return res.data;
   }, []);
 
+  const uploadAvatar = useCallback(async (file) => {
+    const form = new FormData();
+    form.append("file", file);
+    const res = await api.post("/auth/me/avatar", form);
+    setUser(res.data);
+    return res.data;
+  }, []);
+
+  const removeAvatar = useCallback(async () => {
+    const res = await api.delete("/auth/me/avatar");
+    setUser(res.data);
+    return res.data;
+  }, []);
+
   const value = useMemo(
     () => ({
       token,
       user,
       loading,
       isAuthenticated: Boolean(token && user),
+      isSuperadmin: Boolean(user?.is_superadmin),
       loginWithGoogle,
       loginDev,
       updateUsername,
+      uploadAvatar,
+      removeAvatar,
       logout,
       apiErrorMessage,
     }),
-    [token, user, loading, loginWithGoogle, loginDev, updateUsername, logout]
+    [token, user, loading, loginWithGoogle, loginDev, updateUsername, uploadAvatar, removeAvatar, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
