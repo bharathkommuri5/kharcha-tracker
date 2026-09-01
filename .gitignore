@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.db
+backend/outbox/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Env / secrets
+.env
+.env.local
+*.local
+docs/credentials.local.md
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+.qodo/
