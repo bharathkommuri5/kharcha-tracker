@@ -27,6 +27,19 @@ React version `frontend/src/components/BrandMark.jsx` (used in header + landing)
 (`favicon-16/32.png`, `apple-touch-icon.png`, `icon-192/512.png`) + `manifest.webmanifest` for
 installable PWA. Regenerate rasters from the SVG if it changes.
 
+## Frontend architecture
+- **Routing** (react-router-dom): `/` landing, `/app` layout (`pages/AppLayout.jsx`) with nested
+  routes `overview | transactions | teams | teams/:teamId | reports | profile` rendered via
+  `<Outlet context={{ openAdd }}>`. `<NavLink>` for the sidebar / bottom nav. Deep-linkable,
+  refresh-stable, back/forward works. Static-host SPA rewrite is in `render.yaml`.
+- **State**: Context only — `AuthContext`, `ThemeContext`, `ToastContext`, `DashboardContext`
+  (transactions/summary/options/month range + mutations), `TeamsContext`. No Redux/Zustand.
+  Server-fetching is hand-rolled `useEffect` + a stale-response guard; migrating to TanStack Query
+  is a noted future option, not done.
+- **Payment icons**: real PhonePe / Google Pay marks from the open-source `simple-icons` set
+  (shown nominatively to identify the method); brand-colour monograms for CRED / Supermoney;
+  generic lucide icons for cards / cash / other. All other UI icons: `lucide-react` via `lib/icons.js`.
+
 ## Conventions
 - Currency is **₹ INR** everywhere. Never render `$`.
 - Backend: Python 3.11+, FastAPI, SQLModel, Alembic. SQLite locally, Postgres in prod.

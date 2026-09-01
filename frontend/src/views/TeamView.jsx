@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { TeamAvatar, UserAvatar } from "../components/Avatar.jsx";
 import CategoryBreakdown from "../components/CategoryBreakdown.jsx";
 import HeroBalance from "../components/HeroBalance.jsx";
@@ -87,7 +88,10 @@ function TeamTransactions({ rows, options }) {
   );
 }
 
-export default function TeamView({ teamId, onLeave }) {
+export default function TeamView() {
+  const { teamId } = useParams();
+  const navigate = useNavigate();
+  const onLeave = () => navigate("/app/teams");
   const { range, options } = useDashboard();
   const toast = useToast();
   const [detail, setDetail] = useState(null);

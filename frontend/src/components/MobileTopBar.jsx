@@ -1,10 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import BrandMark from "./BrandMark.jsx";
 import ThemeToggle from "./ThemeToggle.jsx";
 import { UserAvatar } from "./Avatar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
-export default function MobileTopBar({ onProfile }) {
+export default function MobileTopBar() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur lg:hidden">
@@ -14,7 +16,7 @@ export default function MobileTopBar({ onProfile }) {
       </div>
       <div className="flex items-center gap-1">
         <ThemeToggle />
-        <button onClick={onProfile} aria-label="Profile" className="ml-1">
+        <button onClick={() => navigate("/app/profile")} aria-label="Profile" className="ml-1">
           <UserAvatar user={user} size={32} />
         </button>
       </div>

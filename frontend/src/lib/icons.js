@@ -2,6 +2,7 @@
 export {
   ArrowLeft,
   ArrowLeftRight,
+  Banknote,
   BarChart3,
   Camera,
   ChevronDown,
@@ -12,6 +13,7 @@ export {
   LogOut,
   Mail,
   Minus,
+  MoreHorizontal,
   Pencil,
   Plus,
   Receipt,

@@ -1,14 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TeamAvatar } from "../components/Avatar.jsx";
 import NewTeamModal from "../components/NewTeamModal.jsx";
 import { Button, Card, EmptyState, Spinner } from "../components/ui/index.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useTeams } from "../context/TeamsContext.jsx";
 
-export default function TeamsListView({ onOpenTeam }) {
+export default function TeamsListView() {
   const { teams, loading } = useTeams();
   const { isSuperadmin } = useAuth();
+  const navigate = useNavigate();
   const [newOpen, setNewOpen] = useState(false);
+  const openTeam = (id) => navigate(`/app/teams/${id}`);
 
   return (
     <div className="space-y-4">
@@ -34,7 +37,7 @@ export default function TeamsListView({ onOpenTeam }) {
           {teams.map((t) => (
             <button
               key={t.id}
-              onClick={() => onOpenTeam(t.id)}
+              onClick={() => openTeam(t.id)}
               className="flex items-center gap-3 rounded-2xl bg-surface p-4 text-left shadow-card ring-1 ring-line/70 transition hover:shadow-card-hover"
             >
               <TeamAvatar team={t} size={44} />
@@ -49,7 +52,7 @@ export default function TeamsListView({ onOpenTeam }) {
         </div>
       )}
 
-      <NewTeamModal open={newOpen} onClose={() => setNewOpen(false)} onCreated={(t) => onOpenTeam(t.id)} />
+      <NewTeamModal open={newOpen} onClose={() => setNewOpen(false)} onCreated={(t) => openTeam(t.id)} />
     </div>
   );
 }

@@ -1,34 +1,36 @@
-// Compact brand-style badges for payment modes. Simplified marks (colour + glyph),
-// drawn as an SVG set so they read as one family at 20–28px.
+import { siGooglepay, siPhonepe } from "simple-icons";
+import { Banknote, CreditCard, MoreHorizontal } from "../lib/icons.js";
 
-function Frame({ size, bg, children, ring }) {
+// Payment-mode badges. Real provider marks (PhonePe, Google Pay) come from the
+// open-source Simple Icons set and are shown nominatively to identify the method.
+// Providers not in that set use a brand-coloured monogram; card/cash/other use
+// generic icons.
+
+function Square({ size, bg, ring, children }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="0.5" y="0.5" width="23" height="23" rx="6" fill={bg} stroke={ring || "none"} />
+    <span
+      style={{ width: size, height: size, background: bg, boxShadow: ring ? `inset 0 0 0 1px ${ring}` : undefined }}
+      className="grid shrink-0 place-items-center rounded-md text-white"
+    >
       {children}
+    </span>
+  );
+}
+
+function BrandGlyph({ icon, size, color }) {
+  const g = Math.round(size * 0.62);
+  return (
+    <svg width={g} height={g} viewBox="0 0 24 24" fill={color || "#fff"} aria-hidden="true">
+      <path d={icon.path} />
     </svg>
   );
 }
 
-const T = (props) => (
-  <text
-    x="12"
-    y="12"
-    textAnchor="middle"
-    dominantBaseline="central"
-    fontFamily="Inter, system-ui, sans-serif"
-    fontWeight="700"
-    {...props}
-  />
-);
-
-function CardGlyph({ color }) {
+function Monogram({ text, size }) {
   return (
-    <>
-      <rect x="4.5" y="7" width="15" height="10.5" rx="2" fill="none" stroke="#fff" strokeWidth="1.6" />
-      <rect x="4.5" y="9.6" width="15" height="2.3" fill="#fff" />
-      <rect x="6.7" y="14" width="4.5" height="1.5" rx="0.75" fill={color || "#fff"} opacity="0.9" />
-    </>
+    <span style={{ fontSize: Math.round(size * 0.44) }} className="font-bold leading-none">
+      {text}
+    </span>
   );
 }
 
@@ -36,56 +38,51 @@ export default function PaymentIcon({ mode, size = 22 }) {
   switch (mode) {
     case "phonepe":
       return (
-        <Frame size={size} bg="#5f259f">
-          <T fontSize="9" fill="#ffffff">Pe</T>
-        </Frame>
+        <Square size={size} bg="#5F259F">
+          <BrandGlyph icon={siPhonepe} size={size} />
+        </Square>
       );
     case "gpay":
       return (
-        <Frame size={size} bg="#ffffff" ring="#e2e8f0">
-          <circle cx="8.4" cy="6" r="1.7" fill="#EA4335" />
-          <circle cx="15.6" cy="6" r="1.7" fill="#FBBC04" />
-          <circle cx="8.4" cy="18" r="1.7" fill="#34A853" />
-          <T fontSize="10" fill="#4285F4">G</T>
-        </Frame>
+        <Square size={size} bg="#ffffff" ring="#e2e8f0">
+          <BrandGlyph icon={siGooglepay} size={size} color="#4285F4" />
+        </Square>
       );
     case "supermoney":
       return (
-        <Frame size={size} bg="#00b8a3">
-          <T fontSize="11" fill="#ffffff">S</T>
-        </Frame>
+        <Square size={size} bg="#00b8a3">
+          <Monogram text="s" size={size} />
+        </Square>
       );
     case "cred":
       return (
-        <Frame size={size} bg="#0a0a0a">
-          <T fontSize="10" fill="#ffffff" letterSpacing="-0.5">C</T>
-        </Frame>
+        <Square size={size} bg="#0a0a0a">
+          <Monogram text="C" size={size} />
+        </Square>
       );
     case "credit_card":
       return (
-        <Frame size={size} bg="#4f46e5">
-          <CardGlyph color="#c7d2fe" />
-        </Frame>
+        <Square size={size} bg="#4f46e5">
+          <CreditCard size={Math.round(size * 0.58)} strokeWidth={2} />
+        </Square>
       );
     case "debit_card":
       return (
-        <Frame size={size} bg="#0d9488">
-          <CardGlyph color="#99f6e4" />
-        </Frame>
+        <Square size={size} bg="#0d9488">
+          <CreditCard size={Math.round(size * 0.58)} strokeWidth={2} />
+        </Square>
       );
     case "cash":
       return (
-        <Frame size={size} bg="#16a34a">
-          <T fontSize="11" fill="#ffffff">₹</T>
-        </Frame>
+        <Square size={size} bg="#16a34a">
+          <Banknote size={Math.round(size * 0.6)} strokeWidth={2} />
+        </Square>
       );
     default:
       return (
-        <Frame size={size} bg="#64748b">
-          <circle cx="8" cy="12" r="1.5" fill="#fff" />
-          <circle cx="12" cy="12" r="1.5" fill="#fff" />
-          <circle cx="16" cy="12" r="1.5" fill="#fff" />
-        </Frame>
+        <Square size={size} bg="#64748b">
+          <MoreHorizontal size={Math.round(size * 0.6)} strokeWidth={2.5} />
+        </Square>
       );
   }
 }
