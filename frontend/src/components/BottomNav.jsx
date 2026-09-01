@@ -9,8 +9,10 @@ export default function BottomNav({ view, onView, onAdd }) {
           key={item.key}
           onClick={() => onView(item.key)}
           className={cn(
-            "flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-medium transition",
-            view === item.key ? "text-accent" : "text-faint"
+            "flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition",
+            view === item.key || (view === "team" && item.key === "teams")
+              ? "text-accent"
+              : "text-faint"
           )}
         >
           <span className="h-5 w-5">{item.icon}</span>
@@ -19,7 +21,7 @@ export default function BottomNav({ view, onView, onAdd }) {
       ))}
       <button
         onClick={onAdd}
-        className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold text-accent"
+        className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-semibold text-accent"
       >
         <span className="grid h-6 w-6 place-items-center rounded-full bg-accent text-base leading-none text-accent-fg">
           ＋

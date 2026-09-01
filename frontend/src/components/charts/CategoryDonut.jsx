@@ -1,11 +1,9 @@
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { useDashboard } from "../../context/DashboardContext.jsx";
 import { formatINR } from "../../lib/format.js";
 import ChartCard from "./ChartCard.jsx";
 import { tooltipStyle, useChartTheme } from "./useChartTheme.js";
 
-export default function CategoryDonut() {
-  const { summary, options } = useDashboard();
+export default function CategoryDonut({ summary, options }) {
   const t = useChartTheme();
   const colorFor = {};
   (options?.categories || []).forEach((c) => (colorFor[c.value] = c.color));

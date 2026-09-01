@@ -4,6 +4,7 @@ os.environ.setdefault("DEV_AUTH", "true")
 os.environ.setdefault("JWT_SECRET", "test-secret-key")
 os.environ.setdefault("GOOGLE_CLIENT_ID", "")
 os.environ.setdefault("DATABASE_URL", "sqlite://")
+os.environ.setdefault("SUPERADMIN_EMAILS", "admin@example.com")
 
 import pytest
 from fastapi.testclient import TestClient
@@ -46,3 +47,15 @@ def auth_headers(client):
         return {"Authorization": f"Bearer {r.json()['access_token']}"}
 
     return _login
+
+
+@pytest.fixture
+def png_bytes():
+    """A tiny valid PNG for avatar-upload tests."""
+    import io
+
+    from PIL import Image
+
+    buf = io.BytesIO()
+    Image.new("RGB", (400, 300), (80, 120, 220)).save(buf, format="PNG")
+    return buf.getvalue()

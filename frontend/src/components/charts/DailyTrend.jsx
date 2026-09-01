@@ -7,13 +7,11 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useDashboard } from "../../context/DashboardContext.jsx";
 import { formatFullDate, formatINR, formatINRCompact } from "../../lib/format.js";
 import ChartCard from "./ChartCard.jsx";
 import { tooltipStyle, useChartTheme } from "./useChartTheme.js";
 
-export default function DailyTrend() {
-  const { summary } = useDashboard();
+export default function DailyTrend({ summary }) {
   const t = useChartTheme();
   const daily = summary?.daily || [];
   const data = daily.map((d) => ({

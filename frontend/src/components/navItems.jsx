@@ -26,6 +26,16 @@ export const NAV_ITEMS = [
     ),
   },
   {
+    key: "teams",
+    label: "Teams",
+    icon: (
+      <svg viewBox="0 0 24 24" {...stroke}>
+        <circle cx="9" cy="8" r="3" />
+        <path d="M4 20c0-3 2.5-5 5-5s5 2 5 5M17 11a3 3 0 100-6M20 20c0-2.5-1.5-4.5-4-5" />
+      </svg>
+    ),
+  },
+  {
     key: "reports",
     label: "Reports",
     icon: (

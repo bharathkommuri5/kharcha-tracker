@@ -16,6 +16,8 @@ Work them in order; do not start a story until the previous one is tested and me
 | [US-09](us-09-right-panel-charts.md) | Right panel — summary cards + charts | 🟢 Done (live-tested) |
 | [US-10](us-10-email-report-modal.md) | Email report modal (default/custom range) | 🟢 Done (dev-mode live-tested) |
 | [US-11](us-11-render-deploy.md) | Render deployment & end-to-end test | 🟡 Config ready — deploy pending |
+| [US-12](us-12-profiles-avatars.md) | User profiles & avatar images + theme toggle move | 🟢 Done |
+| [US-13](us-13-teams-collaboration.md) | Teams & combined expense view (super-admin managed) | 🟢 Done |
 
 Legend: ⚪ Not started · 🟡 In progress · 🟢 Done (tested) · 🔵 Deployed
 

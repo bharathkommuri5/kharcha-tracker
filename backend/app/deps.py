@@ -45,3 +45,16 @@ def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def require_superadmin(current_user: CurrentUser) -> User:
+    from app.presenters import is_superadmin
+
+    if not is_superadmin(current_user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Super-admin access required"
+        )
+    return current_user
+
+
+SuperAdmin = Annotated[User, Depends(require_superadmin)]

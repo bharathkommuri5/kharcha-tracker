@@ -1,7 +1,7 @@
 """Authentication: Google sign-in, dev-login fallback, current-user profile."""
 import re
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, UploadFile, status
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token as google_id_token
 from sqlalchemy.exc import IntegrityError
@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 from app.config import settings
 from app.deps import CurrentUser, SessionDep
 from app.models import User
+from app.presenters import user_read
 from app.schemas import (
     DevLoginRequest,
     GoogleAuthRequest,
@@ -18,6 +19,7 @@ from app.schemas import (
     UsernameUpdate,
 )
 from app.security import create_access_token
+from app.services import images as image_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -52,7 +54,6 @@ def _get_or_create_user(session: Session, *, google_id: str, email: str, name: s
         session.commit()
         session.refresh(user)
     elif user.email != email or (name and user.name != name):
-        # keep profile fields fresh from Google
         user.email = email
         if name:
             user.name = name
@@ -63,10 +64,7 @@ def _get_or_create_user(session: Session, *, google_id: str, email: str, name: s
 
 
 def _issue(session: Session, user: User) -> TokenResponse:
-    return TokenResponse(
-        access_token=create_access_token(user.id),
-        user=UserRead.model_validate(user),
-    )
+    return TokenResponse(access_token=create_access_token(user.id), user=user_read(session, user))
 
 
 @router.post("/google", response_model=TokenResponse)
@@ -114,12 +112,12 @@ def dev_login(body: DevLoginRequest, session: SessionDep) -> TokenResponse:
 
 
 @router.get("/me", response_model=UserRead)
-def me(current_user: CurrentUser) -> User:
-    return current_user
+def me(current_user: CurrentUser, session: SessionDep) -> UserRead:
+    return user_read(session, current_user)
 
 
 @router.patch("/me", response_model=UserRead)
-def update_me(body: UsernameUpdate, current_user: CurrentUser, session: SessionDep) -> User:
+def update_me(body: UsernameUpdate, current_user: CurrentUser, session: SessionDep) -> UserRead:
     current_user.username = body.username
     session.add(current_user)
     try:
@@ -130,4 +128,27 @@ def update_me(body: UsernameUpdate, current_user: CurrentUser, session: SessionD
             status_code=status.HTTP_409_CONFLICT, detail="Username already taken"
         ) from None
     session.refresh(current_user)
-    return current_user
+    return user_read(session, current_user)
+
+
+@router.post("/me/avatar", response_model=UserRead)
+async def set_avatar(current_user: CurrentUser, session: SessionDep, file: UploadFile) -> UserRead:
+    old_id = current_user.avatar_image_id
+    image = await image_service.store_avatar(session, file)
+    current_user.avatar_image_id = image.id
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    image_service.delete_image(session, old_id)
+    return user_read(session, current_user)
+
+
+@router.delete("/me/avatar", response_model=UserRead)
+def clear_avatar(current_user: CurrentUser, session: SessionDep) -> UserRead:
+    old_id = current_user.avatar_image_id
+    current_user.avatar_image_id = None
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    image_service.delete_image(session, old_id)
+    return user_read(session, current_user)

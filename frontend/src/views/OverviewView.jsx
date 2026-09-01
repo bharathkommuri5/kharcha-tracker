@@ -9,7 +9,7 @@ import { useDashboard } from "../context/DashboardContext.jsx";
 import { Card, EmptyState } from "../components/ui/index.jsx";
 
 export default function OverviewView({ onAdd }) {
-  const { summary, loading } = useDashboard();
+  const { summary, options, range, loading } = useDashboard();
   const empty = summary && summary.transaction_count === 0 && !loading;
 
   return (
@@ -19,7 +19,7 @@ export default function OverviewView({ onAdd }) {
         <MonthNav />
       </div>
 
-      <HeroBalance />
+      <HeroBalance summary={summary} range={range} />
 
       <QuickAddTiles onPick={onAdd} />
 
@@ -32,12 +32,12 @@ export default function OverviewView({ onAdd }) {
       ) : (
         <>
           <div className="grid gap-4 lg:grid-cols-2">
-            <CategoryDonut />
-            <CategoryBreakdown />
+            <CategoryDonut summary={summary} options={options} />
+            <CategoryBreakdown summary={summary} options={options} />
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
-            <PaymentBar />
-            <DailyTrend />
+            <PaymentBar summary={summary} />
+            <DailyTrend summary={summary} />
           </div>
         </>
       )}
