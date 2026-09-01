@@ -8,14 +8,21 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { apiErrorMessage } from "../lib/api.js";
+import { BarChart3, Mail, Zap } from "../lib/icons.js";
 
-const DEV_AUTH = import.meta.env.VITE_DEV_AUTH === "true";
 const HAS_GOOGLE = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+// Dev login only appears on a local dev server — never in a production build.
+const SHOW_DEV_LOGIN =
+  import.meta.env.VITE_DEV_AUTH === "true" &&
+  import.meta.env.DEV &&
+  /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
 
-function Feature({ icon, title, children }) {
+function Feature({ Icon, title, children }) {
   return (
     <div className="flex gap-3">
-      <div className="text-xl">{icon}</div>
+      <div className="mt-0.5 text-indigo-200">
+        <Icon size={20} strokeWidth={2} />
+      </div>
       <div>
         <p className="text-sm font-semibold text-white">{title}</p>
         <p className="text-xs text-indigo-200">{children}</p>
@@ -83,13 +90,13 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="space-y-4">
-            <Feature icon="⚡" title="Quick add">
+            <Feature Icon={Zap} title="Quick add">
               Slider or exact amount, category & payment mode.
             </Feature>
-            <Feature icon="📊" title="Live charts">
+            <Feature Icon={BarChart3} title="Live charts">
               Category, payment-mode and daily-trend views.
             </Feature>
-            <Feature icon="✉️" title="Emailed reports">
+            <Feature Icon={Mail} title="Emailed reports">
               Month-to-date or a custom range.
             </Feature>
           </div>
@@ -120,27 +127,30 @@ export default function LandingPage() {
             </div>
           ) : (
             <p className="rounded-lg bg-amber-500/10 p-3 text-xs text-amber-600 ring-1 ring-amber-500/30">
-              Google sign-in isn’t configured (<code>VITE_GOOGLE_CLIENT_ID</code> is empty). Use the
-              dev login below.
+              Google sign-in isn’t configured (<code>VITE_GOOGLE_CLIENT_ID</code> is empty).
             </p>
           )}
 
-          {DEV_AUTH && (
-            <form onSubmit={handleDev} className="space-y-3 rounded-xl bg-surface-2 p-4 ring-1 ring-line">
-              <p className="text-xs font-semibold uppercase tracking-wide text-faint">Dev login</p>
-              <Field label="Email">
-                <TextInput
-                  type="email"
-                  required
-                  value={devEmail}
-                  onChange={(e) => setDevEmail(e.target.value)}
-                  placeholder="you@example.com"
-                />
-              </Field>
-              <Button type="submit" variant="secondary" className="w-full" loading={busy}>
-                Continue without Google
-              </Button>
-            </form>
+          {SHOW_DEV_LOGIN && (
+            <details className="rounded-xl bg-surface-2 p-3 text-xs ring-1 ring-line">
+              <summary className="cursor-pointer font-semibold uppercase tracking-wide text-faint">
+                Dev login (local only)
+              </summary>
+              <form onSubmit={handleDev} className="mt-3 space-y-3">
+                <Field label="Email">
+                  <TextInput
+                    type="email"
+                    required
+                    value={devEmail}
+                    onChange={(e) => setDevEmail(e.target.value)}
+                    placeholder="you@example.com"
+                  />
+                </Field>
+                <Button type="submit" variant="secondary" className="w-full" loading={busy}>
+                  Continue
+                </Button>
+              </form>
+            </details>
           )}
         </div>
       </div>

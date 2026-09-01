@@ -1,3 +1,4 @@
+import { Plus } from "../lib/icons.js";
 import { NAV_ITEMS } from "./navItems.jsx";
 import { cn } from "./ui/index.jsx";
 
@@ -15,7 +16,7 @@ export default function BottomNav({ view, onView, onAdd }) {
               : "text-faint"
           )}
         >
-          <span className="h-5 w-5">{item.icon}</span>
+          <item.Icon size={20} strokeWidth={2} />
           {item.label}
         </button>
       ))}
@@ -23,8 +24,8 @@ export default function BottomNav({ view, onView, onAdd }) {
         onClick={onAdd}
         className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-semibold text-accent"
       >
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-accent text-base leading-none text-accent-fg">
-          ＋
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-accent text-accent-fg">
+          <Plus size={16} strokeWidth={2.5} />
         </span>
         Add
       </button>

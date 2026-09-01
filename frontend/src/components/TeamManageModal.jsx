@@ -3,6 +3,7 @@ import api from "../lib/api.js";
 import { useTeams } from "../context/TeamsContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { apiErrorMessage } from "../lib/api.js";
+import { Minus } from "../lib/icons.js";
 import AvatarUploader from "./AvatarUploader.jsx";
 import { UserAvatar } from "./Avatar.jsx";
 import MemberPicker from "./MemberPicker.jsx";
@@ -130,9 +131,7 @@ export default function TeamManageModal({ teamId, open, onClose, onChanged, onDe
                     className="rounded-lg p-1.5 text-faint hover:bg-negative/15 hover:text-negative"
                     aria-label="Remove member"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clipRule="evenodd" />
-                    </svg>
+                    <Minus size={16} strokeWidth={2.25} />
                   </button>
                 </li>
               ))}

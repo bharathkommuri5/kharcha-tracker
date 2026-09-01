@@ -11,6 +11,7 @@ import { Button, Card, EmptyState, Spinner } from "../components/ui/index.jsx";
 import { useDashboard } from "../context/DashboardContext.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { formatDayMonth, formatINR } from "../lib/format.js";
+import { ChevronLeft } from "../lib/icons.js";
 import api, { apiErrorMessage } from "../lib/api.js";
 
 function MemberBreakdown({ byMember, total }) {
@@ -141,9 +142,7 @@ export default function TeamView({ teamId, onLeave }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button onClick={onLeave} className="rounded-lg p-1.5 text-muted hover:bg-surface-2 hover:text-fg" aria-label="Back">
-            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01.02 1.06L9.06 10l3.75 3.71a.75.75 0 11-1.06 1.06l-4.25-4.25a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.04-.02z" clipRule="evenodd" />
-            </svg>
+            <ChevronLeft size={16} strokeWidth={2.25} />
           </button>
           {detail && <TeamAvatar team={detail} size={32} />}
           <h1 className="text-lg font-bold text-fg">{detail?.name || "Team"}</h1>

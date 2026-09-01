@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../lib/api.js";
+import { Search } from "../lib/icons.js";
 import { UserAvatar } from "./Avatar.jsx";
-import { Spinner, TextInput } from "./ui/index.jsx";
+import { Spinner } from "./ui/index.jsx";
 
 // Search the user directory (super-admin only) and pick someone to add.
 export default function MemberPicker({ existingIds = [], onPick }) {
@@ -29,12 +30,19 @@ export default function MemberPicker({ existingIds = [], onPick }) {
 
   return (
     <div className="space-y-2">
-      <TextInput
-        placeholder="Search people by name or email…"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        autoFocus
-      />
+      <div className="relative">
+        <Search
+          size={16}
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
+        />
+        <input
+          placeholder="Search people by name or email…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          autoFocus
+          className="block w-full rounded-xl border-0 bg-surface py-2.5 pl-9 pr-3 text-sm text-fg ring-1 ring-inset ring-line placeholder:text-faint focus:ring-2 focus:ring-inset focus:ring-accent"
+        />
+      </div>
       <div className="max-h-64 overflow-y-auto rounded-xl border border-line">
         {loading && (
           <div className="flex justify-center py-6 text-faint">

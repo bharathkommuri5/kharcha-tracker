@@ -1,3 +1,4 @@
+import { Plus } from "../lib/icons.js";
 import { UserAvatar, TeamAvatar } from "./Avatar.jsx";
 import BrandMark from "./BrandMark.jsx";
 import { NAV_ITEMS } from "./navItems.jsx";
@@ -18,7 +19,7 @@ export default function Sidebar({ view, activeTeamId, onView, onOpenTeam, onAdd 
 
       <div className="px-3">
         <Button className="w-full" onClick={onAdd}>
-          <span className="text-base leading-none">＋</span> Add Expense
+          <Plus size={16} strokeWidth={2.5} /> Add Expense
         </Button>
       </div>
 
@@ -34,7 +35,7 @@ export default function Sidebar({ view, activeTeamId, onView, onOpenTeam, onAdd 
                 : "text-muted hover:bg-surface-2 hover:text-fg"
             )}
           >
-            <span className="h-[18px] w-[18px]">{item.icon}</span>
+            <item.Icon size={18} strokeWidth={2} />
             {item.label}
           </button>
         ))}
